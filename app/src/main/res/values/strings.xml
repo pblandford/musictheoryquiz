@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MusicTheory</string>
+    <string name="ks_question">What is this key signature?</string>
+    <string name="note_question">What is this note?</string>
+    <string name="interval_question">What is this interval?</string>
+    <string name="scale_question">To which scale do these notes belong?</string>
+    <string name="you_scored">You scored %1$s out of %2$s</string>
+    <string name="choose">Choose a subject:</string>
+    <string name="term_question">What is the meaning of this musical term?</string>
+    <string name="triad_question">What is this triad?</string>
+</resources>

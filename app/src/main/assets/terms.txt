@@ -1,0 +1,184 @@
+a capella	unaccompanied
+a piacere	at pleasure
+accelerando	gradually getting faster
+accento	accented; emphasised
+ad libitum	at choice; freely
+adagietto	rather slow
+adagio	slowly
+affabile	friendly
+affettuoso	tenderly
+affrettando	hurrying
+agitato	agitated; restless
+alla breve	with a minim beat
+allargando	broadening
+allegretto	fairly quick
+allegro	fast
+amabile	amiable; pleasant
+andante	walking speed
+andantino	like walking speed
+anima	soul; spirit
+animando	becoming more lively
+animato	animated; lively
+appassionato	with passion
+arco	with the bow
+arioso	like an aria
+assai	very
+attacca	go straight on
+ben	well
+bis	twice
+bravura	skill; brilliance
+brio	vigour
+calando	getting softer; dying away
+cantabile	in a singing style
+cantando	singing
+capriccioso	in a whimsical or fanciful style
+col; colla; colle	with
+come	as; similar to
+comodo	convenient
+con	with
+crescendo	gradually getting louder
+da capo	from the beginning
+dal segno	from the sign
+deciso	with determination
+decrescendo	gradually getting softer
+delicato	delicate
+diminuendo	gradually getting softer
+dolce	sweetly
+dolente	sad; mournful
+dolore	grief
+doloroso	sorrowful
+doppio movimento	twice as fast
+e; ed	and
+energico	energetic
+espressivo	expressive
+estinto	as soft as possible
+facile	easy
+felice	happy
+fermata	pause
+feroce	fierce
+al fine	to the end	
+flessibile	flexible
+forte	loud; strong
+fortepiano	loud then immediately soft
+fortissimo	very loud
+forza	force
+fretta	haste
+fuoco	fire
+furioso	furious
+giocoso	playful; humerous
+giojoso	joyful; merry
+giusto	proper; exact
+grandioso	grandly
+grave	very slow; solemn
+grazioso	graceful
+impetuoso	impetuous
+incalzando	getting quicker
+inquieto	restless
+in relievo	prominent
+lacrimoso	sad
+largamente	broadly
+larghetto	rather slow
+largo	rather slow; stately
+legato	smoothly
+leggiero	light; nimble
+lento	slow
+liberamente	freely
+l'istesso	the same
+loco	at the normal pitch
+lugubre	mournful
+lunga	long
+lusigando	coaxing
+ma	but
+maestoso	majestic
+mancando	fading away
+marcato	emphatic; accented
+marziale	in a military style
+meno	less
+mesto	sad
+mezzoforte	moderately loud
+mezzopiano	moderately soft
+misterioso	mysterious
+misura	measure
+moderato	moderate speed
+molto	very; much
+morendo	dying away
+mosso	movement
+moto	movement
+niente	nothing
+nobilmente	nobly
+non	not
+nuovo	new
+obbligato	obligatory
+ossia	or; alternatively
+ostinato	persistent
+parlando	speaking
+patetico	with deep feeling
+pausa	pause
+per	by; for; to
+perdendosi	dying away
+pesante	heavy
+piacevole	pleasant
+piangevole	plaintive
+pianissimo	very soft
+piano	soft
+più	more
+pizzicato	plucked
+placido	calm; peaceful
+pochettino	rather little
+poco	a little
+possible	possible
+precipitando	rushing; headlong
+presto	very fast
+prima	first
+quasi	as if; resembling
+rallentando	gradually getting slower
+rigoroso	strict
+rinforzando	reinforcing
+risoluto	bold; strong
+ritardando	gradually getting slower
+ritenuto	held back
+ritmico	rhythmically
+rubato	with some freedom of time
+scherzando	playful; joking
+scherzo	joke; jest
+seconda	second
+semplice	simple; plain
+sempre	always
+senza	without
+segue	go straight on
+sforzando	forced; accented
+simile	in the same way
+slargando	getting slower
+slancio	enthusiasm
+smorzando	dying away
+soave	gentle; smooth
+solenne	solemn; grave
+sonoro	resonant; with rich tone
+sopra	above
+sospirando	sighing
+sostenuto	sustained
+sotto	below
+spirito	spirited
+spiritoso	spirited
+staccato	detached
+strepitoso	noisy; boisterous
+stretto	quickening the speed
+stringendo	gradually getting faster
+subito	suddenly
+tacet	silent
+tanto	so much
+tempo	speed
+teneramente	tenderly
+tenuto	held
+tosto	swift; rapid
+tranquillo	calm
+trionfale	triumphant
+triste	sad; sorrowful
+troppo	too much
+tutti	all; everyone
+veloce	swift
+vigoroso	vigorous; strong
+vivace	lively
+vivo	lively
+voce	voice
+volante	flying; fast
