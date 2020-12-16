@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicTheory</string>
+    <string name="app_name">MusicTheoryQuiz</string>
     <string name="ks_question">What is this key signature?</string>
     <string name="note_question">What is this note?</string>
     <string name="interval_question">What is this interval?</string>
@@ -8,4 +8,28 @@
     <string name="choose">Choose a subject:</string>
     <string name="term_question">What is the meaning of this musical term?</string>
     <string name="triad_question">What is this triad?</string>
+
+    <string name="notes_level0">No ledger lines, no accidentals</string>
+    <string name="notes_level1">No ledger lines, accidentals</string>
+    <string name="notes_level2">Ledger lines, accidentals</string>
+
+    <string name="key_level0">Major keys, up to 4 accidentals</string>
+    <string name="key_level1">Minor keys, up to 4 accidentals</string>
+    <string name="key_level2">Major keys, any accidentals</string>
+    <string name="key_level3">Minor keys, any accidentals</string>
+
+    <string name="triad_level0">Root position only</string>
+    <string name="triad_level1">All inversions</string>
+    <string name="triad_level2">All inversions, spaced</string>
+
+    <string name="interval_level0">Major, Minor, Perfect</string>
+    <string name="interval_level1">All intervals</string>
+
+    <string name="scale_level0">Up to 4 accidentals</string>
+    <string name="scale_level1">Any accidentals</string>
+
+    <string name="banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_id_release">ca-app-pub-2643541606004324/2603665775</string>
+    <string name="interstitial_id_test">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_id_release">ca-app-pub-2643541606004324/2753491973</string>
 </resources>

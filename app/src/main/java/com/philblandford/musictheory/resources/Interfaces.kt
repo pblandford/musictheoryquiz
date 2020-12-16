@@ -34,6 +34,7 @@ interface Repository {
   fun setQuiz(quizType: QuizType)
   fun getQuiz():Quiz?
   fun getQuizzes():List<QuizDescriptor>
+  fun clear()
 }
 
 interface SoundPlayer {

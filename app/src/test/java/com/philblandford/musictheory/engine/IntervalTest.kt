@@ -7,7 +7,7 @@ import  com.philblandford.musictheory.engine.IntervalAlteration.*
 import org.junit.Assert.*
 import org.junit.Test
 
-class IntervalKtTest {
+class IntervalTest {
 
   @Test
   fun testGetMinorSecond() {
@@ -302,6 +302,18 @@ class IntervalKtTest {
   fun testGetPerfectFourthAwkwardFlatNote() {
     val res = Pitch(B, FLAT, 4).getInterval(Interval(4, PERFECT))
     assertEquals(Pitch(E, FLAT, 5), res)
+  }
+
+  @Test
+  fun testGetPerfectFourthSecondIsAwkward() {
+    val res = Pitch(F, NATURAL, 4).getInterval(Interval(4, PERFECT))
+    assertEquals(Pitch(B, FLAT, 4), res)
+  }
+
+  @Test
+  fun testGetAugmentedFourthSecondIsAwkward() {
+    val res = Pitch(F, NATURAL, 4).getInterval(Interval(4, AUGMENTED))
+    assertEquals(Pitch(B, NATURAL, 4), res)
   }
 
   @Test

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706204802105",
+    "project_id": "music-theory-quiz-423a1",
+    "storage_bucket": "music-theory-quiz-423a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706204802105:android:7b0985eabc623ccadd81e8",
+        "android_client_info": {
+          "package_name": "com.philblandford.musictheory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706204802105-dv7g096l82gkshqmjqa15pjeh34nb4f1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5BDpALytLuXciUuaFkEuNtWv7emrk6k0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706204802105-dv7g096l82gkshqmjqa15pjeh34nb4f1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

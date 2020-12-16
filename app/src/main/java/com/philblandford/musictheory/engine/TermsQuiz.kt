@@ -26,6 +26,12 @@ class TermsQuiz private constructor(num: Int = DEFAULT_NUM_QUESTIONS) : Quiz() {
     }
   }
 
+  override fun init() {
+    terms.clear()
+    terms.addAll(allTerms.shuffled().take(numQuestions))
+    super.init()
+  }
+
   companion object {
     fun termsQuiz(num: Int = DEFAULT_NUM_QUESTIONS) = TermsQuiz(num).apply { init() }
   }

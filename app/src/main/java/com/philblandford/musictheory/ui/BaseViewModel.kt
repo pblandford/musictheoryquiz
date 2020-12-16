@@ -24,7 +24,7 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
   protected val preferenceGetter:PreferenceGetter by inject()
   private val soundPlayer: SoundPlayer by inject()
 
-  fun init() {
+  open fun init() {
     initModel()?.let {
       model.value = it
       mainLoop()
@@ -33,7 +33,16 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
   protected open fun initModel():T? = null
 
-  fun getModel(): LiveData<T> = model
+  fun getModel(): LiveData<T> {
+    if (model.value == null) {
+      init()
+    }
+    return model
+  }
+
+  fun clearModel() {
+    model.value = null
+  }
 
   fun receiveIntent(uiIntent: UIIntent) {
     viewModelScope.launch {

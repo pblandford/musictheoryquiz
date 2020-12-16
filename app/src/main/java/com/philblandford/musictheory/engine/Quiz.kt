@@ -1,11 +1,13 @@
 package com.philblandford.musictheory.engine
 
+import android.util.Log
 import com.philblandford.kscore.api.*
 import com.philblandford.kscore.engine.core.representation.Standalone
 import com.philblandford.kscore.engine.core.representation.StandaloneGenerator
 import com.philblandford.kscore.engine.duration.Note
 import com.philblandford.kscore.engine.duration.semibreve
 import com.philblandford.kscore.engine.pitch.getClef
+import com.philblandford.kscore.engine.pitch.getNoteShift
 import com.philblandford.kscore.engine.types.*
 import com.philblandford.musictheory.resources.*
 import org.koin.core.KoinComponent
@@ -15,37 +17,53 @@ import kotlin.random.Random
 
 const val DEFAULT_NUM_QUESTIONS = 10
 
-data class Question(val text:String, val answers:List<String>, val correctIdx:Int, val standalone:Standalone) {
+data class Level(val num:Int, val description:String)
+
+data class Question(
+  val text: String,
+  val answers: List<String>,
+  val correctIdx: Int,
+  val standalone: Standalone
+) {
   val correctAnswer = answers[correctIdx]
 }
 
-abstract class Quiz(val numQuestions:Int = DEFAULT_NUM_QUESTIONS) : KoinComponent {
+abstract class Quiz(
+  val numQuestions: Int = DEFAULT_NUM_QUESTIONS,
+  protected var level: Int = 0
+) : KoinComponent {
 
-  var currentScore:Int = 0
+  var currentScore: Int = 0
 
-  protected val stringResolver:StringResolver by inject()
-  protected val randomNumber:RandomNumber by inject()
+  protected val stringResolver: StringResolver by inject()
+  protected val randomNumber: RandomNumber by inject()
 
-  private val drawableGetter:DrawableGetter by inject()
+  private val drawableGetter: DrawableGetter by inject()
   protected val standaloneGenerator = StandaloneGenerator(drawableGetter)
-  protected val assetManager:AssetManager by inject()
-  protected val preferenceGetter:PreferenceGetter by inject()
+  protected val assetManager: AssetManager by inject()
+  protected val preferenceGetter: PreferenceGetter by inject()
 
-  private var currentQuestion:Question? = null
+  private var currentQuestion: Question? = null
   private val questions = Stack<Question>()
 
-  protected abstract fun createQuestion():Question?
+  protected abstract fun createQuestion(): Question?
+  open fun getLevels():List<Level> = listOf()
 
-  fun getNextQuestion():Question? {
+  fun setQuizLevel(value:Int) {
+    level = value
+    init()
+  }
+
+  fun getNextQuestion(): Question? {
     currentQuestion = try {
       questions.pop()
-    } catch (e:EmptyStackException) {
+    } catch (e: EmptyStackException) {
       null
     }
     return currentQuestion
   }
 
-  fun selectAnswer(idx:Int):Boolean {
+  fun selectAnswer(idx: Int): Boolean {
     return currentQuestion?.let { q ->
       if (q.correctIdx == idx) {
         currentScore += 1
@@ -56,45 +74,67 @@ abstract class Quiz(val numQuestions:Int = DEFAULT_NUM_QUESTIONS) : KoinComponen
     } ?: false
   }
 
-  fun questionsComplete():Int {
+  fun questionsComplete(): Int {
     return numQuestions - questions.size - 1
   }
 
-  fun init() {
-    while(questions.size < numQuestions) {
+  open fun init() {
+    questions.clear()
+    while (questions.size < numQuestions) {
       createQuestion()?.let { next ->
-        if (!questions.any { it.correctAnswer == next.correctAnswer }) {
+        if (!requireUnique() || !questions.any { it.correctAnswer == next.correctAnswer }) {
           questions.push(next)
         }
       }
     }
   }
 
-  protected fun getClef():ClefType {
+  protected open fun requireUnique() = true
+
+  protected fun getClef(): ClefType {
     val clefs = preferenceGetter.getPreferredClefs()
     return clefs[randomNumber.getInt(0, clefs.size)]
   }
 
-  protected fun getOctave(clefType:ClefType):Int {
+  protected open fun getOctave(clefType: ClefType): Int {
     val clef = getClef(clefType)!!
-    return clef.topNoteOctave + randomNumber.getInt(-1,1)
+    return clef.topNoteOctave + randomNumber.getInt(-1, 1)
   }
 
-  protected fun getRandomNote(clefType: ClefType, ignore:Set<Pitch> = setOf()): Note {
-    var pitch:Pitch? = null
+  protected fun getRandomNote(clefType: ClefType, ignore: Set<Pitch> = setOf()): Note {
+    var pitch: Pitch? = null
     val ignoreNoOctave = ignore.map { it.octaveless() }
+    val range = getNoteRange(clefType)
 
     while (pitch == null || ignoreNoOctave.contains(pitch.octaveless())) {
-
-      val letter = NoteLetter.values()[randomNumber.getInt(0, 7)]
-      val accidental = accidentals[randomNumber.getInt(0, accidentals.size)]
-      val octave = getOctave(clefType)
-      pitch = Pitch(letter, accidental, octave, accidental != Accidental.NATURAL)
+      pitch = range[randomNumber.getInt(0, range.size)]
+      val accidental = getAccidental()
+      pitch = pitch.copy(accidental = accidental, showAccidental = accidental != Accidental.NATURAL)
+        .correctOctave()
     }
     return Note(semibreve(), pitch)
   }
 
-  protected fun Pitch.adjustOctaveSmallRange(clef: ClefType):Pitch {
+  protected open fun getNoteRange(clefType: ClefType): List<Pitch> {
+    return getClef(clefType)?.let { clef ->
+      val range = if (!fullRange()) -13..1 else -24..12
+      range.map { Pitch(clef.topNote, octave = clef.topNoteOctave).getNoteShift(it) }
+    } ?: listOf()
+  }
+
+  protected open fun fullRange():Boolean {
+    return true
+  }
+
+  protected open fun getAccidental():Accidental {
+    return if (level == 0) {
+      Accidental.NATURAL
+    } else {
+      accidentals[randomNumber.getInt(0, accidentals.size)]
+    }
+  }
+
+  protected fun Pitch.adjustOctaveSmallRange(clef: ClefType): Pitch {
     val octave = when (clef) {
       ClefType.TREBLE -> 4
       ClefType.ALTO -> 3
@@ -103,6 +143,14 @@ abstract class Quiz(val numQuestions:Int = DEFAULT_NUM_QUESTIONS) : KoinComponen
       else -> 4
     }
     return copy(octave = octave)
+  }
+
+  protected fun Pitch.correctOctave(): Pitch {
+    return if (noteLetter == NoteLetter.B && accidental == Accidental.SHARP) {
+      copy(octave = octave + 1)
+    } else if (noteLetter == NoteLetter.C && accidental == Accidental.FLAT) {
+      copy(octave = octave - 1)
+    } else this
   }
 
   private val accidentals = listOf(Accidental.SHARP, Accidental.FLAT, Accidental.NATURAL)

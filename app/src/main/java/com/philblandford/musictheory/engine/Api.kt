@@ -1,6 +1,6 @@
 package com.philblandford.musictheory.engine
 
-val keyNames = mapOf(
+val majorKeyNames = mapOf(
   0 to "C",
   1 to "G",
   2 to "D",
@@ -16,4 +16,22 @@ val keyNames = mapOf(
   -5 to "Db",
   -6 to "Gb",
   -7 to "Cb"
+)
+
+val minorKeyNames = mapOf(
+  0 to "A",
+  1 to "E",
+  2 to "B",
+  3 to "F#",
+  4 to "C#",
+  5 to "G#",
+  6 to "D#",
+  7 to "A#",
+  -1 to "D",
+  -2 to "G",
+  -3 to "C",
+  -4 to "F",
+  -5 to "Bb",
+  -6 to "Eb",
+  -7 to "Ab"
 )

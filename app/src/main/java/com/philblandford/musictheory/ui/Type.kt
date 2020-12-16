@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
 val typographyPhone = Typography(
-  defaultFontFamily = FontFamily.Serif,
+  defaultFontFamily = FontFamily.SansSerif,
   body1 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 16.sp
@@ -20,7 +20,7 @@ val typographyPhone = Typography(
 )
 
 val typographyTablet = Typography(
-  defaultFontFamily = FontFamily.Serif,
+  defaultFontFamily = FontFamily.SansSerif,
   body1 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 25.sp

@@ -16,26 +16,14 @@ import java.util.*
 
 class KeySignatureQuizTest : TestBase() {
 
-  private val mockRandom:RandomNumber = mock()
-  private val numberStack = Stack<Int>()
   private lateinit var keySignatureQuiz:KeySignatureQuiz
 
   @Override
   override fun setup() {
     super.setup()
-    numberStack.clear()
   }
 
-  override fun getRandom(): RandomNumber {
-    whenever(mockRandom.randomList(any<List<String>>())).thenAnswer {
-      it.arguments.first()
-    }
-    whenever(mockRandom.getInt(any(),any())).thenAnswer {
-      numberStack.pop()
-    }
 
-    return mockRandom
-  }
 
   @Test
   fun testGetQuestionAnswers() {

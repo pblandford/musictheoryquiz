@@ -87,7 +87,7 @@ fun Pitch.longName():String {
     Accidental.SHARP -> "Sharp"
     else -> ""
   }
-  return "$noteLetter $accString"
+  return "$noteLetter $accString".trim()
 }
 
 fun String.qualityFull():String {

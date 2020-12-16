@@ -15,26 +15,26 @@ import com.philblandford.musictheory.resources.Repository
 
 class StubRepository : Repository {
 
-  private var currentQuiz: Quiz = noteQuiz()
+  private var currentQuiz: Quiz? = null
 
   override fun getNextQuestion(): Question? {
-    return currentQuiz.getNextQuestion()
+    return currentQuiz?.getNextQuestion()
   }
 
   override fun selectAnswer(idx: Int): Boolean {
-    return currentQuiz.selectAnswer(idx)
+    return currentQuiz?.selectAnswer(idx) ?: false
   }
 
   override fun getScore(): Int {
-    return currentQuiz.currentScore
+    return currentQuiz?.currentScore ?: 0
   }
 
   override fun getNumQuestions(): Int {
-    return currentQuiz.numQuestions
+    return currentQuiz?.numQuestions ?: 0
   }
 
   override fun getQuestionsComplete(): Int {
-    return currentQuiz.questionsComplete()
+    return currentQuiz?.questionsComplete() ?: 0
   }
 
   override fun setQuiz(quizType: QuizType) {
@@ -50,6 +50,10 @@ class StubRepository : Repository {
 
   override fun getQuiz(): Quiz? {
     return currentQuiz
+  }
+
+  override fun clear() {
+    currentQuiz = null
   }
 
   override fun getQuizzes(): List<QuizDescriptor> {
