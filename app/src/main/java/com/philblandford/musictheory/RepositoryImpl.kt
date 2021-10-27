@@ -13,7 +13,7 @@ import com.philblandford.musictheory.resources.QuizDescriptor
 import com.philblandford.musictheory.resources.QuizType
 import com.philblandford.musictheory.resources.Repository
 
-class StubRepository : Repository {
+class RepositoryImpl : Repository {
 
   private var currentQuiz: Quiz? = null
 

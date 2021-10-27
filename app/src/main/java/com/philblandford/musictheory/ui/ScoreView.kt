@@ -10,10 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.philblandford.kscore.api.KScore
 import com.philblandford.kscore.engine.core.representation.Standalone
 
 @Composable
@@ -22,9 +18,9 @@ fun ScoreView(standalone: Standalone, available: Int, modifier: Modifier = Modif
   val scale = if (standalone.width > available) {
     available.toFloat() / standalone.width
   } else 1f
-  Canvas(modifier) {
-    scale(scale) {
-      standalone.draw(this)
-    }
+    Canvas(modifier) {
+      scale(scale) {
+        standalone.draw(this)
+      }
   }
 }

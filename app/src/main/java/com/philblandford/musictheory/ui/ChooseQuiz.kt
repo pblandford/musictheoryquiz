@@ -16,65 +16,63 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.layout.WithConstraintsScope
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
 import androidx.compose.ui.window.Popup
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.philblandford.kscore.engine.types.ClefType
+import com.philblandford.musictheory.LocalDimensions
 import com.philblandford.musictheory.resources.QuizType
 import com.philblandford.musictheory.R
 import com.philblandford.musictheory.engine.Level
+import com.philblandford.musictheory.resources.QuizDescriptor
 
 @Composable
 fun ChooseQuiz(onComplete: () -> Unit) {
-
   val viewModel = viewModel<ChooseQuizViewModel>()
 
   viewModel.getModel().observeAsState().value?.let { model ->
-
-    WithConstraints(Modifier.fillMaxSize()) {
-
-      ConstraintLayout(Modifier.fillMaxSize()) {
-        val block = block()
-        val (title, clefs, selection) = createRefs()
-        Title(Modifier.constrainAs(title) {
-          top.linkTo(parent.top, 10.dp)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-          height = Dimension.value(block * 2)
-          width = Dimension.fillToConstraints
-        })
-
-        Selection(model.quizzes, Modifier.constrainAs(selection) {
-          top.linkTo(title.bottom, 10.dp)
-          bottom.linkTo(clefs.top)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-          width = Dimension.fillToConstraints
-          height = Dimension.fillToConstraints
-        }, { intent ->
-          viewModel.receiveIntent(intent)
-        }) { onComplete() }
-
-        ClefSelection(model, viewModel, Modifier.constrainAs(clefs) {
-          bottom.linkTo(parent.bottom, 10.dp)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-          width = Dimension.fillToConstraints
-        }, block())
-      }
-    }
+    ChooseQuizInternal(model, viewModel::receiveIntent, onComplete)
   }
-
 }
 
 @Composable
+private fun ChooseQuizInternal(
+  model: ChooseQuizModel,
+  cmd: (UIIntent) -> Unit,
+  onComplete: () -> Unit
+) {
+
+  val block = LocalDimensions.current.block
+
+  Column(Modifier.fillMaxSize()) {
+
+    Title(
+      Modifier
+        .height(block * 2)
+        .fillMaxWidth()
+        .background(Color.Blue)
+    )
+
+    Selection(model.quizzes,
+      Modifier
+        .fillMaxWidth()
+        .weight(1f), cmd) { onComplete() }
+
+    ClefSelection(model, cmd, Modifier.fillMaxWidth(), block)
+
+  }
+}
+
+
+@Composable
 private fun ClefSelection(
-  model: ChooseQuizModel, viewModel: ChooseQuizViewModel,
-  modifier: Modifier, height: Dp
+  model: ChooseQuizModel, cmd: (UIIntent) -> Unit,
+  modifier: Modifier, imageHeight: Dp
 ) {
 
   Row(
@@ -84,11 +82,11 @@ private fun ClefSelection(
   ) {
     model.clefs.forEach { cd ->
       Checkbox(cd.enabled, onCheckedChange = { yes ->
-        viewModel.receiveIntent(UIIntent.SelectClef(cd.clefType, yes))
+        cmd(UIIntent.SelectClef(cd.clefType, yes))
       })
       Image(
-        imageResource(cd.resId), Modifier.size(height),
-        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSecondary)
+        painterResource(cd.resId), stringResource(R.string.clef), Modifier.size(imageHeight),
+        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
       )
     }
   }
@@ -96,7 +94,11 @@ private fun ClefSelection(
 
 @Composable
 private fun Title(modifier: Modifier) {
-  Box(modifier.background(MaterialTheme.colors.primary).border(2.dp, Color.White)) {
+  Box(
+    modifier
+      .background(MaterialTheme.colors.primary)
+      .border(2.dp, Color.White)
+  ) {
     Text(
       stringResource(R.string.choose),
       Modifier.align(Alignment.Center),
@@ -116,7 +118,9 @@ private fun Selection(
 
   showPopup.value?.let {
     LevelPopup(it, { showPopup.value = null }) { level ->
-      cmd(UIIntent.SetLevel(level))
+      level?.let {
+        cmd(UIIntent.SetLevel(it))
+      }
       onComplete()
     }
   }
@@ -136,30 +140,70 @@ private fun Option(
 ) {
 
 
-  ConstraintLayout(modifier.background(quizDescriptor.color).clickable(onClick = {
-    select(quizDescriptor.quizDescriptor.type)
-  })) {
-    val (image, text) = createRefs()
+  BoxWithConstraints(
+    modifier
+      .background(quizDescriptor.color)
+      .clickable(onClick = {
+        select(quizDescriptor.quizDescriptor.type)
+      })
+  ) {
     Image(
-      imageResource(id = quizDescriptor.resId),
-      Modifier.constrainAs(image) {
-        centerTo(parent)
-        width = Dimension.percent(0.5f)
-        height = Dimension.percent(0.5f)
-      }.background(Color.Transparent),
+      painterResource(id = quizDescriptor.resId), "Option",
+      Modifier
+        .fillMaxSize(0.5f)
+        .background(Color.Transparent).align(Alignment.Center),
       colorFilter = ColorFilter.tint(MaterialTheme.colors.onSecondary)
     )
-    Text(quizDescriptor.quizDescriptor.name, Modifier.constrainAs(text) {
-      bottom.linkTo(parent.bottom, 10.dp)
-      centerHorizontallyTo(parent)
-    }, color = MaterialTheme.colors.onSecondary)
+    Text(
+      quizDescriptor.quizDescriptor.name,
+      Modifier.align(Alignment.BottomCenter).offset(y = (-20).dp),
+      color = MaterialTheme.colors.onSecondary
+    )
   }
 
 }
 
 @Composable
-private fun LevelPopup(quizName: String, dismiss: () -> Unit, onSelect: (Int) -> Unit) {
-  Popup(Alignment.Center, isFocusable = true, onDismissRequest = dismiss) {
+private fun LevelPopup(quizName: String, dismiss: () -> Unit, onSelect: (Int?) -> Unit) {
+  Popup(Alignment.Center, onDismissRequest = dismiss) {
     ChooseLevel(quizName, Modifier.fillMaxWidth(), onSelect)
   }
+}
+
+@Composable
+@Preview
+private fun Preview() {
+  ThemeBox {
+    ChooseQuizInternal(ChooseQuizModel(
+      listOf(
+        ClefDescriptor(ClefType.TREBLE, true, R.drawable.treble_clef),
+        ClefDescriptor(ClefType.BASS, true, R.drawable.treble_clef),
+        ClefDescriptor(ClefType.TREBLE, true, R.drawable.treble_clef),
+        ClefDescriptor(ClefType.BASS, true, R.drawable.treble_clef)
+      ),
+      listOf(
+        QuizDescriptorDisplay(
+          QuizDescriptor(QuizType.INTERVAL, "Intervals"),
+          R.drawable.interval,
+          Color.Blue
+        ),
+        QuizDescriptorDisplay(
+          QuizDescriptor(QuizType.KEY, "Keys"),
+          R.drawable.key_signature,
+          Color.Green
+        ),
+        QuizDescriptorDisplay(
+          QuizDescriptor(QuizType.INTERVAL, "Intervals"),
+          R.drawable.interval,
+          Color.Blue
+        ),
+        QuizDescriptorDisplay(
+          QuizDescriptor(QuizType.KEY, "Keys"),
+          R.drawable.key_signature,
+          Color.Green
+        ),
+      )
+    ), {}) {}
+  }
+
 }

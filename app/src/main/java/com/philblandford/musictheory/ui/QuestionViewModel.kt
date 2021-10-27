@@ -32,6 +32,12 @@ class QuestionViewModel : BaseViewModel<QuestionModel>(), KoinComponent {
     init()
   }
 
+  fun startQuiz() {
+    if (getModel().value?.complete == false && getModel().value?.question == null) {
+      init()
+    }
+  }
+
   override fun initModel(): QuestionModel {
     return QuestionModel(
       repository.getNextQuestion(), listOf(), repository.getNumQuestions(),
@@ -66,6 +72,9 @@ class QuestionViewModel : BaseViewModel<QuestionModel>(), KoinComponent {
           repository.getScore() == repository.getQuestionsComplete(),
           nextQuestion == null
         )
+      }
+      UIIntent.ClearCompleteFlag -> {
+        model.copy(complete = false)
       }
       else -> model
     }

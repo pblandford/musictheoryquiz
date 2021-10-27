@@ -55,11 +55,14 @@ abstract class Quiz(
   }
 
   fun getNextQuestion(): Question? {
+    Log.e("FFS", "GNQ ${questions.size}")
     currentQuestion = try {
       questions.pop()
     } catch (e: EmptyStackException) {
       null
     }
+    Log.e("FFS", "GNQ2 ${questions.size}")
+
     return currentQuestion
   }
 
@@ -67,6 +70,8 @@ abstract class Quiz(
     return currentQuestion?.let { q ->
       if (q.correctIdx == idx) {
         currentScore += 1
+        Log.e("FFS", "Correct $idx $currentScore ${questions.size}")
+
         true
       } else {
         false
@@ -80,6 +85,7 @@ abstract class Quiz(
 
   open fun init() {
     questions.clear()
+    currentScore = 0
     while (questions.size < numQuestions) {
       createQuestion()?.let { next ->
         if (!requireUnique() || !questions.any { it.correctAnswer == next.correctAnswer }) {
@@ -87,6 +93,7 @@ abstract class Quiz(
         }
       }
     }
+    Log.e("FFS", "init ${questions.size} $numQuestions")
   }
 
   protected open fun requireUnique() = true

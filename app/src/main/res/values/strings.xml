@@ -8,6 +8,7 @@
     <string name="choose">Choose a subject:</string>
     <string name="term_question">What is the meaning of this musical term?</string>
     <string name="triad_question">What is this triad?</string>
+    <string name="clef">Clef</string>
 
     <string name="notes_level0">No ledger lines, no accidentals</string>
     <string name="notes_level1">No ledger lines, accidentals</string>

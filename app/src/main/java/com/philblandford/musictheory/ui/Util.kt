@@ -1,21 +1,22 @@
 package com.philblandford.musictheory.ui
 
 import android.util.Log
-import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.layout.WithConstraintsScope
-import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -24,64 +25,84 @@ import com.philblandford.kscore.engine.duration.Chord
 import com.philblandford.kscore.engine.types.Accidental
 import com.philblandford.kscore.engine.types.Pitch
 
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun<T> AnimatedGrid(
-  numColumns:Int,
+fun <T> AnimatedGrid(
+  numColumns: Int,
   items: List<T>,
   modifier: Modifier,
-  child:@Composable BoxScope.(T, Modifier)->Unit,
+  child: @Composable BoxScope.(T, Modifier) -> Unit,
 ) {
-  WithConstraints(modifier.fillMaxSize()) {
-    ScrollableColumn() {
+  BoxWithConstraints(modifier.fillMaxSize()) {
+    val width = maxWidth
+    val height = maxHeight
+    val scope = this
+
+    Column(Modifier.fillMaxSize()) {
       (0 until (items.size / numColumns)).forEach { row ->
         Row {
-          val itemWidth = (constraints.maxWidth / AmbientDensity.current.density) / numColumns
-          val itemHeight = (constraints.maxHeight / AmbientDensity.current.density) / (items.size/numColumns)
+          val itemWidth = width / numColumns
+          val itemHeight = height / (items.size / numColumns)
           val subSet = items.subList(row * numColumns, (row + 1) * numColumns)
           subSet.forEach { item ->
-              Box(Modifier.size(itemWidth.dp, itemHeight.dp).border(2.dp, Color.White)) {
-                Animation(itemWidth) { size ->
-                  val ratio = size / itemWidth
-                  val height = (itemHeight * ratio).dp
-                  child(item, Modifier.size(size.dp, height).align(Alignment.Center))
-                }
-              }
+            Item<T>(itemWidth, itemHeight) {
+              scope.child(item, Modifier.fillMaxSize())
             }
           }
         }
       }
     }
   }
-
-
-
-@Composable
- fun Animation(target: Float, duration:Int = 1000, delay:Int = 0,children: @Composable (Float) -> Unit) {
-  val percent = animatedFloat(0f)
-  onActive {
-    percent.animateTo(target, tween(duration, delay))
-  }
-  children(percent.value)
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WithConstraintsScope.block(): Dp {
-  val div = if (isPhone()) 13  else 20
+private fun <T> Item(
+  itemWidth: Dp, itemHeight: Dp,
+  child: @Composable () -> Unit
+) {
+  val visible = remember { mutableStateOf(false) }
+
+  LaunchedEffect(Unit) {
+    visible.value = true
+  }
+
+  Box(
+    Modifier
+      .size(itemWidth, itemHeight)
+      .border(2.dp, Color.White)
+  ) {
+
+    AnimatedVisibility(
+      visible = visible.value,
+      enter = scaleIn(animationSpec =
+      tween(1000, easing = LinearOutSlowInEasing))
+    ) {
+      child()
+    }
+  }
+}
+
+
+@Composable
+fun BoxWithConstraintsScope.block(): Dp {
+  val div = if (isPhone()) 13 else 20
   val res = (maxWidth) / div
   Log.e("PHN", "$res")
   return res
 }
 
 @Composable
-fun WithConstraintsScope.isPhone():Boolean {
+fun BoxWithConstraintsScope.isPhone(): Boolean {
   return maxWidth.value < 500
 }
 
-fun Chord.name():String {
+fun Chord.name(): String {
   return notes.first().pitch.longName()
 }
 
-fun Pitch.longName():String {
+fun Pitch.longName(): String {
   val accString = when (accidental) {
     Accidental.FLAT -> "Flat"
     Accidental.SHARP -> "Sharp"
@@ -90,7 +111,7 @@ fun Pitch.longName():String {
   return "$noteLetter $accString".trim()
 }
 
-fun String.qualityFull():String {
+fun String.qualityFull(): String {
   return when (this) {
     "m" -> "Minor"
     else -> "Major"

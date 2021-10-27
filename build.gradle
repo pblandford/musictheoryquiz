@@ -1,21 +1,23 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        compose_version = '1.0.0-alpha08'
+        compose_version = '1.0.4'
         koin_version = '2.1.6'
         lifecycle_version = '2.2.0'
-        nav_compose_version = '1.0.0-alpha03'
+        nav_compose_version = '2.4.0-alpha10'
         preference_version = '1.1.1'
+        kotlin_version = "1.5.31"
+        animation_version = "1.1.0-alpha06"
     }
-    ext.kotlin_version = "1.4.20"
+
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0-alpha02'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.google.gms:google-services:4.3.10'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -26,6 +28,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
+
         maven {
             url "https://mymavenrepo.com/repo/3Z9JWBIUNtcr0yxsvUdM/"
             credentials {
