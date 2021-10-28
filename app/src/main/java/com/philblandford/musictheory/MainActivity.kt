@@ -7,6 +7,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), KoinComponent {
   private lateinit var reviewManager: ReviewManager
   private lateinit var interstitialAd: InterstitialAd
   private val backPressHandler = BackPressHandler()
-  private val drawableGetter:DrawableGetter by inject()
+  private val drawableGetter: DrawableGetter by inject()
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +59,14 @@ class MainActivity : AppCompatActivity(), KoinComponent {
 
     reviewManager = ReviewManagerFactory.create(this)
     initInterstitial()
-    (drawableGetter as? ComposeDrawableGetter)?.color = Color.White
 
     MobileAds.initialize(this) { }
 
     setContent {
+      (drawableGetter as? ComposeDrawableGetter)?.color =
+        if (isSystemInDarkTheme()) Color.White else Color.Black
+
+
       CompositionLocalProvider(
         LocalBackPressHandler provides backPressHandler
       ) {

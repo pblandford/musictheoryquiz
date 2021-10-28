@@ -61,7 +61,7 @@ dependencies {
 
 
     implementation 'com.philblandford:KScore:1.0.1.46'
-    implementation 'com.philblandford:kscoreandroid:1.1.2'
+    implementation 'com.philblandford:kscoreandroid:1.1.5'
     implementation 'com.philblandford:mp3converter:1.0.0'
 
     implementation 'com.github.zsoltk:compose-router:0.28.0'
