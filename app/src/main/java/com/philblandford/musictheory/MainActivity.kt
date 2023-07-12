@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), KoinComponent {
   @Composable
   private fun AdBanner(modifier: Modifier) {
     val adview = AdView(this).apply {
-      adSize = AdSize.BANNER
+      setAdSize(AdSize.BANNER)
       val idRes = if (BuildConfig.DEBUG) R.string.banner_id_test else R.string.banner_id_release
       adUnitId = getString(idRes)
       val adRequest = AdRequest.Builder().build()
